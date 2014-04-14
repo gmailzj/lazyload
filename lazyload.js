@@ -1,5 +1,5 @@
 var LAZY=(function(){
-  var pResizeTimer = null;
+	var pResizeTimer = null;
 	var imgs={};
 	function addEventHandler (oTarget, sEventType, fnHandler) {
 		if (oTarget.addEventListener) {
@@ -18,8 +18,11 @@ var LAZY=(function(){
 		var min={};
 		var max={};
 		//min.Top=document.documentElement.scrollTop;
-        min.Top = document.body.scrollTop + document.documentElement.scrollTop;
-		min.Left=document.documentElement.scrollLeft;
+
+		min.Top = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+        //min.Top = document.body.scrollTop + document.documentElement.scrollTop;
+		min.Left = document.documentElement.scrollLeft || window.pageXOffset || document.body.scrollLeft;
+		//min.Left=document.documentElement.scrollLeft;
 		max.Top=min.Top+document.documentElement.clientHeight;
 		max.Left=min.Left+document.documentElement.clientWidth;
 
@@ -30,6 +33,11 @@ var LAZY=(function(){
 				var width = img.clientWidth;
 				var height = img.clientHeight;
 				var wh=position(img);
+				if(typeof jQuery !=='undefined'){
+					wh = jQuery(img).offset();
+					wh.Top = wh.top;
+					wh.Left = wh.left;
+				}			 
 				if(
 					(wh.Top>=min.Top && wh.Top<=max.Top && wh.Left>=min.Left && wh.Left<=max.Left)
 					||
